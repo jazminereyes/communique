@@ -83,7 +83,7 @@ class Main extends Component{
           :(
             <div className="row mt-5">
               <div className="col-md-12 text-center">
-                <img src="/static/img/person.jpg" className="img-fluid" height="300px" width="300px"/>
+                <img src={process.env.PUBLIC_URL + '/static/img/person.jpg'} className="img-fluid" height="300px" width="300px"/>
                 <h5 className="semi-bold">Oops. No stories yet. Be the first one to share!</h5>
               </div>
             </div>
