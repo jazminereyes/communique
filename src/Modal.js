@@ -10,7 +10,7 @@ class Modal extends Component{
 
     this.state = this.getInitialState();
 
-    this.handleClose = () => this.setState({show:false});
+    this.handleClose = () => this.setState(this.getInitialState());
 
     this.handleShow = this.handleShow.bind(this);
     this.handleStory = this.handleStory.bind(this);
@@ -35,11 +35,24 @@ class Modal extends Component{
     });
   }
 
+  displayAlert(text){
+    swal({
+      title: "Oops",
+      text: text,
+      icon: process.env.PUBLIC_URL + '/static/img/require.jpg',
+    });
+  }
+
   handleStory(e){
     e.preventDefault();
-    this.setState({
-      addStory: true
-    });
+    if(this.state.userName){
+      this.setState({
+        addStory: true
+      });
+    }else{
+      this.displayAlert("You haven't told us your name yet.");
+    }
+
   }
 
   handleChange(e) {
@@ -55,19 +68,24 @@ class Modal extends Component{
   }
 
   handleSubmit(){
-    this.props.formValue(
-      this.state.userName,
-      this.state.userStory
-    );
+    if(this.state.userStory){
+      this.props.formValue(
+        this.state.userName,
+        this.state.userStory
+      );
 
-    swal({
-      title: "Story Submitted!",
-      text: "Thanks for sharing with us. Your story can be viewed in the board.",
-      icon: "success",
-    })
-    .then(() => {
-      this.setState(this.getInitialState());
-    });
+      swal({
+        title: "Story Submitted!",
+        text: "Thanks for sharing with us. Your story can be viewed in the board.",
+        icon: "success",
+      })
+      .then(() => {
+        this.setState(this.getInitialState());
+      });
+    }else{
+      this.displayAlert("Tell us your story before you go!");
+    }
+
   }
 
   render(){
@@ -81,12 +99,12 @@ class Modal extends Component{
           <BootstrapModal.Body>
             { this.state.addStory ?
               <div>
-                <h6 className="semi-bold">Tell us your story...</h6>
+                <h6 className="semi-bold">Tell us your story...<span className="text-danger">*</span></h6>
                 <textarea className="form-control" rows="8" name="story" value={this.state.userStory} onChange={this.handleChange}/>
               </div>
             :(
               <div>
-                <h6 className="semi-bold">What's your name?</h6>
+                <h6 className="semi-bold">What's your name?<span className="text-danger">*</span></h6>
                 <input className="form-control" name="user" value={this.state.userName} onChange={this.handleChange}/>
               </div>
             ) }
